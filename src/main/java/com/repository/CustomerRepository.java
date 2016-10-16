@@ -3,7 +3,6 @@ package com.repository;
 import com.domain.Customer;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.access.prepost.PreAuthorize;
 
 /**
  * Created by Michał on 2016-10-02.
