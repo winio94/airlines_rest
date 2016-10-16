@@ -17,6 +17,7 @@ public class RestConfiguration {
     public static final String PUT = "PUT";
     public static final String POST = "POST";
     public static final String DELETE = "DELETE";
+    public static final String OPTIONS = "OPTIONS";
     public static final String PATH = "/**";
 
     @Bean
@@ -30,6 +31,7 @@ public class RestConfiguration {
         config.addAllowedMethod(PUT);
         config.addAllowedMethod(POST);
         config.addAllowedMethod(DELETE);
+        config.addAllowedMethod(OPTIONS);
         source.registerCorsConfiguration(PATH, config);
         return new CorsFilter(source);
     }

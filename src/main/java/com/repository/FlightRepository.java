@@ -8,20 +8,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 /**
  * Created by Michał on 2016-10-02.
  */
-
 public interface FlightRepository extends PagingAndSortingRepository<Flight, Long> {
-
     Flight findByFlightNumber(@Param("number") String number);
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @Override
-    Flight save(Flight entity);
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @Override
-    void delete(Long aLong);
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @Override
-    void delete(Flight entity);
 }
