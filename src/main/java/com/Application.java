@@ -1,14 +1,18 @@
 package com;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.filter.CorsFilter;
 
 import java.security.Principal;
 
@@ -30,7 +34,11 @@ public class Application {
     }
 
     @Configuration
-    protected static class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+    @EnableWebSecurity
+    protected class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+        @Autowired
+        private CorsFilter corsBean;
 
         @Override
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -41,7 +49,8 @@ public class Application {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http.csrf().disable()
+            http.addFilterBefore(corsBean, ChannelProcessingFilter.class)
+                    .csrf().disable()
                     .authorizeRequests()
                     .antMatchers(HttpMethod.PUT, "/flights").access("hasRole('ROLE_ADMIN')")
                     .antMatchers(HttpMethod.POST, "/flights").access("hasRole('ROLE_ADMIN')")
