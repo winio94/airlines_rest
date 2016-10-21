@@ -10,7 +10,6 @@ import java.security.Principal;
 /**
  * Created by Michał on 2016-10-01.
  */
-
 @SpringBootApplication
 @RestController
 public class Application {
