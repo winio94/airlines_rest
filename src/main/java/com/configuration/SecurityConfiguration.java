@@ -29,7 +29,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.addFilterBefore(corsFilter, ChannelProcessingFilter.class)
+        http.headers()
+            .frameOptions()
+            .sameOrigin()//h2 console problem due to set 'X-Frame-Options' to 'DENY'.
+            .and()
+            .addFilterBefore(corsFilter, ChannelProcessingFilter.class)
             .csrf().disable()
             .authorizeRequests()
             .antMatchers(HttpMethod.PUT, "/flights").access("hasRole('ROLE_ADMIN')")
