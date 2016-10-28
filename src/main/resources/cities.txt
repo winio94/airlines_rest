@@ -133,8 +133,6 @@ Dęblin
 Dębno
 Dobczyce
 Dobiegniew
-Dobra (Łobez County)
-Dobra (Turek County)
 Dobre Miasto
 Dobrodzień
 Dobrzany
@@ -244,7 +242,6 @@ Jeziorany
 Jędrzejów
 Jordanów
 Józefów
-Józefów (Biłgoraj County)
 Jutrosin
 Kalety
 Kalisz
@@ -345,7 +342,6 @@ Kuźnia Raciborska
 Kwidzyn
 Lądek Zdrój
 Legionowo
-Legnica (Liegnitz)
 Lesko
 Leszno
 Leśna
@@ -822,7 +818,6 @@ Wadowice
 Wałbrzych
 Wałcz
 Warka
-Warsaw (Polish: Warszawa)
 Warta
 Wasilków
 Wąbrzeźno
