@@ -16,6 +16,8 @@ public class Flight {
     private String flightNumber;
     private Date departureDate;
     private Date arrivalDate;
+
+    @Enumerated(EnumType.STRING)
     private FLightClass fLightClass;
 
     @OneToOne

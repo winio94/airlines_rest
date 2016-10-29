@@ -2,6 +2,7 @@ package com.service;
 
 import com.domain.Airport;
 import com.domain.Customer;
+import com.domain.FLightClass;
 import com.domain.Flight;
 import com.repository.AirportRepository;
 import com.repository.CustomerRepository;
@@ -11,9 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.String.valueOf;
 
@@ -24,7 +23,7 @@ import static java.lang.String.valueOf;
 @Component
 public class InitializationService {
 
-    public static final String CITIES_FILE_PATH = "src/main/resources/cities.txt";
+    public static final String CITIES_FILE_PATH = "src/main/resources/bigCities.txt";
     private final List<String> cities = FileUtil.readAllLinesFrom(CITIES_FILE_PATH, "\\s+");
 
     @Autowired
@@ -41,11 +40,28 @@ public class InitializationService {
 
     @PostConstruct
     private void initialize() {
-        for (int i = 0; i < cities.size(); i++) {
-            airportRepository.save(airport(i));
-            customerRepository.save(customer(i));
-            flightRepository.save(flight(i));
+        Random random = new Random();
+        FLightClass[] fLightClasses = FLightClass.values();
+        List<Flight> flights = new ArrayList<>();
+        List<Airport> airports = new ArrayList<>();
+        List<Customer> customers = new ArrayList<>();
+        for(int i = 0 ; i < cities.size(); i++) {
+            Airport airport = airport(i);
+            airports.add(airport);
+            airportRepository.save(airport);
         }
+        for (int i = 0; i < 500; i++) {
+            Customer customer = customer(i);
+            customers.add(customer);
+            customerRepository.save(customer);
+            flights.add(flight(i));
+        }
+        flights.forEach(flight -> {
+            flight.setFrom(airports.get(random.nextInt(airports.size())));
+            flight.setTo(airports.get(random.nextInt(airports.size())));
+            flight.setfLightClass(fLightClasses[random.nextInt(fLightClasses.length)]);
+            flightRepository.save(flight);
+        });
     }
 
     private Airport airport(int i) {
