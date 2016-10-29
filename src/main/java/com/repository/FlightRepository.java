@@ -16,5 +16,5 @@ public interface FlightRepository extends PagingAndSortingRepository<Flight, Lon
     @Query(value = "SELECT f FROM Flight f WHERE f.from.id = (SELECT id from Airport a WHERE a.city like :cityName)")
     List<Flight> findFlightsByFromCity(@Param("cityName") String cityName);
 
-    List<Flight> findFlightsByFromCityIgnoreCaseContaining(@Param("from") String from);
+    List<Flight> findFlightsByFromCityIgnoreCaseContainingAndToCityIgnoreCaseContaining(@Param("from") String from, @Param("to") String to);
 }
