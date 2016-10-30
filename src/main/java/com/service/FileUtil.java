@@ -2,9 +2,14 @@ package com.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,20 +29,20 @@ public final class FileUtil {
 
     public static List<String> readAllLinesFrom(String path, String splitRegex) {
         List<String> lines = new ArrayList<>();
-        File file = new File(path);
-        String absolutePath = file.getAbsolutePath();
-        Path p = null;
+        ClassPathResource classPathResource = null;
         try {
-            p = Paths.get(absolutePath);
-            lines = lines(p)
+            classPathResource = new ClassPathResource(path);
+            InputStreamReader inputStreamReader = new InputStreamReader(classPathResource.getInputStream());
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            lines = bufferedReader.lines()
                     .map(line -> line.split(splitRegex))
                     .flatMap(Arrays::stream)
                     .collect(Collectors.toList());
         } catch (NoSuchFileException e) {
-            LOGGER.error("Could not find file for given path: {}.", p);
+            LOGGER.error("Could not find file for given path: {}.", classPathResource.getPath());
             e.printStackTrace();
         } catch (IOException e) {
-            LOGGER.error("Could not open file for given path: {}.", p);
+            LOGGER.error("Could not open file for given path: {}.", classPathResource.getPath());
             e.printStackTrace();
         }
         return lines;
