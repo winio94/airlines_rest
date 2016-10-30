@@ -7,6 +7,8 @@ import com.domain.Flight;
 import com.repository.AirportRepository;
 import com.repository.CustomerRepository;
 import com.repository.FlightRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,8 +25,12 @@ import static java.lang.String.valueOf;
 @Component
 public class InitializationService {
 
-    public static final String CITIES_FILE_PATH = "src/main/resources/bigCities.txt";
-    private final List<String> cities = FileUtil.readAllLinesFrom(CITIES_FILE_PATH, "\\s+");
+    private static final String CITIES_FILE_PATH = "bigCities.txt";
+    private static final Logger LOGGER = LoggerFactory.getLogger(InitializationService.class);
+    private List<String> cities = new ArrayList<>();
+    private List<Flight> flights = new ArrayList<>();
+    private List<Airport> airports = new ArrayList<>();
+    private List<Customer> customers = new ArrayList<>();
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -33,33 +39,49 @@ public class InitializationService {
     private FlightRepository flightRepository;
 
     @Autowired
-    AirportRepository airportRepository;
+    private AirportRepository airportRepository;
 
     public InitializationService() throws IOException {
     }
 
     @PostConstruct
     private void initialize() {
-        Random random = new Random();
-        FLightClass[] fLightClasses = FLightClass.values();
-        List<Flight> flights = new ArrayList<>();
-        List<Airport> airports = new ArrayList<>();
-        List<Customer> customers = new ArrayList<>();
-        for(int i = 0 ; i < cities.size(); i++) {
+        initializeCities();
+        initializeAirports();
+        initializeCustomers();
+        initializeFlights();
+    }
+
+    private void initializeCities() {
+        cities = FileUtil.readAllLinesFrom(CITIES_FILE_PATH, "\\s+");
+        LOGGER.debug("INITIALIZE CITIES. Cities size : {}.", cities.size());
+    }
+
+    private void initializeAirports() {
+        for (int i = 0; i < cities.size(); i++) {
             Airport airport = airport(i);
             airports.add(airport);
             airportRepository.save(airport);
         }
+    }
+
+    private void initializeCustomers() {
         for (int i = 0; i < 500; i++) {
             Customer customer = customer(i);
             customers.add(customer);
             customerRepository.save(customer);
             flights.add(flight(i));
         }
+    }
+
+    private void initializeFlights() {
+        Random random = new Random();
+        FLightClass[] fLightClasses = FLightClass.values();
         flights.forEach(flight -> {
             flight.setFrom(airports.get(random.nextInt(airports.size())));
             flight.setTo(airports.get(random.nextInt(airports.size())));
-            flight.setfLightClass(fLightClasses[random.nextInt(fLightClasses.length)]);
+            FLightClass fLightClass = fLightClasses[random.nextInt(fLightClasses.length)];
+            flight.setfLightClass(fLightClass);
             flightRepository.save(flight);
         });
     }
