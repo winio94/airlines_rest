@@ -23,24 +23,28 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("admin").password("admin").roles("USER", "ADMIN").and()
-                .withUser("user").password("user").roles("USER");
+            .withUser("admin").password("admin").roles("USER", "ADMIN").and()
+            .withUser("user").password("user").roles("USER");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.addFilterBefore(corsFilter, ChannelProcessingFilter.class)
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.PUT, "/flights").access("hasRole('ROLE_ADMIN')")
-                .antMatchers(HttpMethod.POST, "/flights").access("hasRole('ROLE_ADMIN')")
-                .antMatchers(HttpMethod.DELETE, "/flights").access("hasRole('ROLE_ADMIN')")
-                .antMatchers(HttpMethod.GET, "/customers").access("hasRole('ROLE_ADMIN')")
-                .antMatchers(HttpMethod.POST, "/customers").access("hasRole('ROLE_ADMIN')")
-                .antMatchers(HttpMethod.PUT, "/customers").access("hasRole('ROLE_ADMIN')")
-                .antMatchers(HttpMethod.DELETE, "/customers").access("hasRole('ROLE_ADMIN')")
-                .antMatchers(HttpMethod.OPTIONS, "/*").permitAll()
-                .and()
-                .httpBasic();
+        http.headers()
+            .frameOptions()
+            .sameOrigin()//h2 console problem due to set 'X-Frame-Options' to 'DENY'.
+            .and()
+            .addFilterBefore(corsFilter, ChannelProcessingFilter.class)
+            .csrf().disable()
+            .authorizeRequests()
+            .antMatchers(HttpMethod.PUT, "/flights").access("hasRole('ROLE_ADMIN')")
+            .antMatchers(HttpMethod.POST, "/flights").access("hasRole('ROLE_ADMIN')")
+            .antMatchers(HttpMethod.DELETE, "/flights").access("hasRole('ROLE_ADMIN')")
+            .antMatchers(HttpMethod.GET, "/customers").access("hasRole('ROLE_ADMIN')")
+            .antMatchers(HttpMethod.POST, "/customers").access("hasRole('ROLE_ADMIN')")
+            .antMatchers(HttpMethod.PUT, "/customers").access("hasRole('ROLE_ADMIN')")
+            .antMatchers(HttpMethod.DELETE, "/customers").access("hasRole('ROLE_ADMIN')")
+            .antMatchers(HttpMethod.OPTIONS, "/*").permitAll()
+            .and()
+            .httpBasic();
     }
 }

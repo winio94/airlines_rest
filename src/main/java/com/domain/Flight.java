@@ -1,8 +1,6 @@
 package com.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -17,6 +15,24 @@ public class Flight {
 
     private String flightNumber;
     private Date departureDate;
+    private Date arrivalDate;
+
+    @Enumerated(EnumType.STRING)
+    private FLightClass fLightClass;
+
+    @OneToOne
+    private Airport from;
+
+    @OneToOne
+    private Airport to;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getFlightNumber() {
         return flightNumber;
@@ -32,5 +48,37 @@ public class Flight {
 
     public void setDepartureDate(Date departureDate) {
         this.departureDate = departureDate;
+    }
+
+    public Date getArrivalDate() {
+        return arrivalDate;
+    }
+
+    public void setArrivalDate(Date arrivalDate) {
+        this.arrivalDate = arrivalDate;
+    }
+
+    public FLightClass getfLightClass() {
+        return fLightClass;
+    }
+
+    public void setfLightClass(FLightClass fLightClass) {
+        this.fLightClass = fLightClass;
+    }
+
+    public Airport getFrom() {
+        return from;
+    }
+
+    public void setFrom(Airport from) {
+        this.from = from;
+    }
+
+    public Airport getTo() {
+        return to;
+    }
+
+    public void setTo(Airport to) {
+        this.to = to;
     }
 }
