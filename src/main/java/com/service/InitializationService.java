@@ -27,7 +27,10 @@ public class InitializationService {
 
     private static final String CITIES_FILE_PATH = "bigCities.txt";
     private static final Logger LOGGER = LoggerFactory.getLogger(InitializationService.class);
-    private  List<String> cities;
+    private List<String> cities = new ArrayList<>();
+    private List<Flight> flights = new ArrayList<>();
+    private List<Airport> airports = new ArrayList<>();
+    private List<Customer> customers = new ArrayList<>();
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -43,41 +46,44 @@ public class InitializationService {
 
     @PostConstruct
     private void initialize() {
-        Random random = new Random();
-        FLightClass[] fLightClasses = FLightClass.values();
-        List<Flight> flights = new ArrayList<>();
-        List<Airport> airports = new ArrayList<>();
-        List<Customer> customers = new ArrayList<>();
         initializeCities();
+        initializeAirports();
+        initializeCustomers();
+        initializeFlights();
+    }
+
+    private void initializeCities() {
+        cities = FileUtil.readAllLinesFrom(CITIES_FILE_PATH, "\\s+");
+        LOGGER.debug("INITIALIZE CITIES. Cities size : {}.", cities.size());
+    }
+
+    private void initializeAirports() {
         for (int i = 0; i < cities.size(); i++) {
             Airport airport = airport(i);
             airports.add(airport);
             airportRepository.save(airport);
         }
+    }
+
+    private void initializeCustomers() {
         for (int i = 0; i < 500; i++) {
             Customer customer = customer(i);
             customers.add(customer);
             customerRepository.save(customer);
             flights.add(flight(i));
         }
-        try {
-
-            flights.forEach(flight -> {
-                flight.setFrom(airports.get(random.nextInt(airports.size())));
-                flight.setTo(airports.get(random.nextInt(airports.size())));
-                flight.setfLightClass(fLightClasses[random.nextInt(fLightClasses.length)]);
-                flightRepository.save(flight);
-            });
-        } catch (Exception e) {
-            LOGGER.error("ONE OF THE ARRAY IS EMPTY, AIPORTS AMOUNT: {}, FLIGHTCLASSES AMOUNT : {}", airports.size(), fLightClasses.length);
-            LOGGER.error("error : {}", e);
-            throw e;
-        }
     }
 
-    private void initializeCities() {
-        cities = FileUtil.readAllLinesFrom(CITIES_FILE_PATH, "\\s+");
-        LOGGER.debug("INITIALIZE CITIES. Cities size : {}.", cities.size());
+    private void initializeFlights() {
+        Random random = new Random();
+        FLightClass[] fLightClasses = FLightClass.values();
+        flights.forEach(flight -> {
+            flight.setFrom(airports.get(random.nextInt(airports.size())));
+            flight.setTo(airports.get(random.nextInt(airports.size())));
+            FLightClass fLightClass = fLightClasses[random.nextInt(fLightClasses.length)];
+            flight.setfLightClass(fLightClass);
+            flightRepository.save(flight);
+        });
     }
 
     private Airport airport(int i) {
