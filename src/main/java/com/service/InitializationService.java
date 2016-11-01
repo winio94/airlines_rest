@@ -27,6 +27,8 @@ public class InitializationService {
 
     private static final String CITIES_FILE_PATH = "bigCities.txt";
     private static final Logger LOGGER = LoggerFactory.getLogger(InitializationService.class);
+    public static final int MAX_PRICE = 1000;
+    private final Random random = new Random();
     private List<String> cities = new ArrayList<>();
     private List<Flight> flights = new ArrayList<>();
     private List<Airport> airports = new ArrayList<>();
@@ -75,7 +77,6 @@ public class InitializationService {
     }
 
     private void initializeFlights() {
-        Random random = new Random();
         FLightClass[] fLightClasses = FLightClass.values();
         flights.forEach(flight -> {
             flight.setFrom(airports.get(random.nextInt(airports.size())));
@@ -97,13 +98,17 @@ public class InitializationService {
         Date today = new Date();
         Calendar cal = Calendar.getInstance();
         flight.setFlightNumber(valueOf(counter));
-        flight.setDepartureDate(getDate(counter, today, cal));
+        Date departureDate = getDate(counter, today, cal);
+        flight.setDepartureDate(departureDate);
+        flight.setArrivalDate(getDate(counter, departureDate, cal));
+        double price = random.nextDouble() * MAX_PRICE;
+        flight.setPrice(Math.round(price * 100d) / 100d);
         return flight;
     }
 
     private Date getDate(int counter, Date today, Calendar cal) {
         cal.setTime(today);
-        cal.add(Calendar.DATE, counter);
+        cal.add(Calendar.MINUTE, counter);
         return cal.getTime();
     }
 

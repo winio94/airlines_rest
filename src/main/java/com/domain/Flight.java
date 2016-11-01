@@ -1,6 +1,7 @@
 package com.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -13,17 +14,28 @@ public class Flight {
     @GeneratedValue
     private Long id;
 
+    @NotNull
     private String flightNumber;
+
+    @NotNull
     private Date departureDate;
+
+    @NotNull
     private Date arrivalDate;
 
+    @NotNull
+    private Double price;
+
     @Enumerated(EnumType.STRING)
+    @NotNull
     private FLightClass fLightClass;
 
     @OneToOne
+    @NotNull
     private Airport from;
 
     @OneToOne
+    @NotNull
     private Airport to;
 
     public Long getId() {
@@ -80,5 +92,13 @@ public class Flight {
 
     public void setTo(Airport to) {
         this.to = to;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 }
