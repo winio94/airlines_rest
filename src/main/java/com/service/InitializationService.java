@@ -2,8 +2,8 @@ package com.service;
 
 import com.domain.Airport;
 import com.domain.Customer;
-import com.domain.FLightClass;
 import com.domain.Flight;
+import com.domain.FlightClass;
 import com.repository.AirportRepository;
 import com.repository.CustomerRepository;
 import com.repository.FlightRepository;
@@ -14,9 +14,13 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.Temporal;
 import java.util.*;
 
 import static java.lang.String.valueOf;
+import static java.time.temporal.ChronoUnit.MINUTES;
 
 /**
  * Created by Michał on 2016-10-16.
@@ -77,12 +81,12 @@ public class InitializationService {
     }
 
     private void initializeFlights() {
-        FLightClass[] fLightClasses = FLightClass.values();
+        FlightClass[] flightClasses = FlightClass.values();
         flights.forEach(flight -> {
             flight.setFrom(airports.get(random.nextInt(airports.size())));
             flight.setTo(airports.get(random.nextInt(airports.size())));
-            FLightClass fLightClass = fLightClasses[random.nextInt(fLightClasses.length)];
-            flight.setfLightClass(fLightClass);
+            FlightClass flightClass = flightClasses[random.nextInt(flightClasses.length)];
+            flight.setFlightClass(flightClass);
             flightRepository.save(flight);
         });
     }
@@ -100,10 +104,17 @@ public class InitializationService {
         flight.setFlightNumber(valueOf(counter));
         Date departureDate = getDate(counter, today, cal);
         flight.setDepartureDate(departureDate);
-        flight.setArrivalDate(getDate(counter, departureDate, cal));
+        Date arrivalDate = getDate(counter, departureDate, cal);
+        flight.setArrivalDate(arrivalDate);
+        long between = MINUTES.between(localDateTime(departureDate), localDateTime(arrivalDate));
+        flight.setDuration((int) between);
         double price = random.nextDouble() * MAX_PRICE;
         flight.setPrice(Math.round(price * 100d) / 100d);
         return flight;
+    }
+
+    private Temporal localDateTime(Date date) {
+        return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
     }
 
     private Date getDate(int counter, Date today, Calendar cal) {
