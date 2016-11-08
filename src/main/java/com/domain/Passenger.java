@@ -2,33 +2,22 @@ package com.domain;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.Embeddable;
 
 /**
- * Created by Michał on 2016-10-02.
+ * Created by Michał on 2016-11-07.
  */
-@Entity
-public class Customer {
-
-    @Id
-    @GeneratedValue
-    private Long id;
+@Embeddable
+@Access(AccessType.FIELD)
+public class Passenger {
 
     @NotEmpty
     private String firstName;
 
     @NotEmpty
     private String lastName;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getFirstName() {
         return firstName;
