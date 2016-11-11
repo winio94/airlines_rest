@@ -1,6 +1,9 @@
 package com.domain;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -13,18 +16,32 @@ public class Flight {
     @GeneratedValue
     private Long id;
 
+    @NotEmpty
     private String flightNumber;
+
+    @NotNull
     private Date departureDate;
+
+    @NotNull
     private Date arrivalDate;
 
+    @NotNull
+    private Double price;
+
     @Enumerated(EnumType.STRING)
-    private FLightClass fLightClass;
+    @NotNull
+    private FlightClass flightClass;
 
     @OneToOne
+    @NotNull
     private Airport from;
 
     @OneToOne
+    @NotNull
     private Airport to;
+
+    @NotNull
+    private Integer duration;
 
     public Long getId() {
         return id;
@@ -58,12 +75,12 @@ public class Flight {
         this.arrivalDate = arrivalDate;
     }
 
-    public FLightClass getfLightClass() {
-        return fLightClass;
+    public FlightClass getFlightClass() {
+        return flightClass;
     }
 
-    public void setfLightClass(FLightClass fLightClass) {
-        this.fLightClass = fLightClass;
+    public void setFlightClass(FlightClass flightClass) {
+        this.flightClass = flightClass;
     }
 
     public Airport getFrom() {
@@ -80,5 +97,21 @@ public class Flight {
 
     public void setTo(Airport to) {
         this.to = to;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public Integer getDuration() {
+        return duration;
     }
 }

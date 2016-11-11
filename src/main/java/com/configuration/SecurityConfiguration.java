@@ -39,11 +39,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers(HttpMethod.PUT, "/flights").access("hasRole('ROLE_ADMIN')")
             .antMatchers(HttpMethod.POST, "/flights").access("hasRole('ROLE_ADMIN')")
             .antMatchers(HttpMethod.DELETE, "/flights").access("hasRole('ROLE_ADMIN')")
+            .antMatchers(HttpMethod.GET, "/flights/**").permitAll()
             .antMatchers(HttpMethod.GET, "/customers").access("hasRole('ROLE_ADMIN')")
             .antMatchers(HttpMethod.POST, "/customers").access("hasRole('ROLE_ADMIN')")
             .antMatchers(HttpMethod.PUT, "/customers").access("hasRole('ROLE_ADMIN')")
             .antMatchers(HttpMethod.DELETE, "/customers").access("hasRole('ROLE_ADMIN')")
+            .antMatchers(HttpMethod.POST, "/reservations").permitAll()
+            .antMatchers(HttpMethod.GET, "/airports/**").permitAll()
+            .antMatchers(HttpMethod.GET, "/user").permitAll()
             .antMatchers(HttpMethod.OPTIONS, "/*").permitAll()
+            .antMatchers("/console/**").permitAll()
+            .antMatchers("/**").denyAll()
             .and()
             .httpBasic();
     }

@@ -3,7 +3,7 @@ package com.domain;
 /**
  * Created by Michał on 2016-10-23.
  */
-public enum FLightClass {
+public enum FlightClass {
     ECONOMY("Ekonomy"),
     PREMIUM_ECONOMY("Premium Economy"),
     BUSINESS_CLASS("Business class"),
@@ -11,7 +11,7 @@ public enum FLightClass {
 
     private String flightClass;
 
-    FLightClass(String flightClass) {
+    FlightClass(String flightClass) {
         this.flightClass = flightClass;
     }
 }
