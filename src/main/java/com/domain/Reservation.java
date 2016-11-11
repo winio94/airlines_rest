@@ -1,8 +1,11 @@
 package com.domain;
 
+import com.domain.listener.ReservationListener;
+
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -10,6 +13,7 @@ import java.util.Set;
  */
 
 @Entity
+@EntityListeners(ReservationListener.class)
 public class Reservation {
 
     @Id
@@ -30,6 +34,17 @@ public class Reservation {
     @NotNull
     @OneToOne
     private Flight flight;
+
+    @Column(unique = true)
+    private String reservationCode;
+
+    @Valid
+    @NotNull
+    @Embedded
+    private Contact contact;
+
+    @NotNull
+    private Date reservationDate;
 
     public Long getId() {
         return id;
@@ -69,5 +84,29 @@ public class Reservation {
 
     public void setFlight(Flight flight) {
         this.flight = flight;
+    }
+
+    public String getReservationCode() {
+        return reservationCode;
+    }
+
+    public void setReservationCode(String reservationCode) {
+        this.reservationCode = reservationCode;
+    }
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
+
+    public Date getReservationDate() {
+        return reservationDate;
+    }
+
+    public void setReservationDate(Date reservationDate) {
+        this.reservationDate = reservationDate;
     }
 }
