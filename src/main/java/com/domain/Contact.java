@@ -21,7 +21,7 @@ public class Contact {
 
     @NotEmpty
     @Size(min = 9, max = 12)
-    @Pattern(regexp = "^\\+(?:[0-9] ?){9,12}[0-9]$" , message = "Phone number must have directional at the beginning.")
+    @Pattern(regexp = "^\\+(?:[0-9] ?){9,12}[0-9]$", message = "Phone number must have directional at the beginning.")
     private String phone;
 
     public String getEmail() {
