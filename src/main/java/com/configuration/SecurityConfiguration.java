@@ -1,6 +1,5 @@
 package com.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -10,6 +9,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.web.filter.CorsFilter;
 
+import javax.inject.Inject;
+
 /**
  * Created by Michał on 2016-10-21.
  */
@@ -17,7 +18,7 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Autowired
+    @Inject
     private CorsFilter corsFilter;
 
     @Override

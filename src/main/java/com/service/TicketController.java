@@ -3,11 +3,12 @@ package com.service;
 import com.domain.Reservation;
 import com.domain.Ticket;
 import com.repository.ReservationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.inject.Inject;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -17,10 +18,10 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 public class TicketController {
 
-    @Autowired
+    @Inject
     private TicketService ticketService;
 
-    @Autowired
+    @Inject
     private ReservationRepository reservationRepository;
 
     @Transactional

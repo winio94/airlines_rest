@@ -2,13 +2,14 @@ package com.service;
 
 import com.domain.Ticket;
 import com.repository.TicketRepository;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.inject.Named;
 
 /**
  * Created by Michał on 2016-11-12.
  */
-@Component("ticketService")
+@Named
 @Transactional
 public class TicketServiceImpl implements TicketService {
     private final TicketRepository ticketRepository;
