@@ -16,7 +16,7 @@ import static org.mockito.Mockito.*;
  * Created by Michał on 2016-11-12.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class MailSenderTest {
+public class MailSenderServiceTest {
 
     private static final String DEFAULT_BODY = "defaultBody";
     private static final String DEFAULT_SUBJECT = "defaultSubject";
@@ -27,7 +27,7 @@ public class MailSenderTest {
     private JavaMailSender javaMailSender;
 
     @InjectMocks
-    private MailSender mailSender;
+    private MailSenderService mailSender;
 
     @Test
     public void shouldSendMessageForGivenArguments() throws Exception {

@@ -13,8 +13,9 @@ import static javax.mail.Message.RecipientType.TO;
 /**
  * Created by Michał on 2016-11-12.
  */
+
 @Named
-public class MailSender {
+public class MailSenderService {
 
     @Inject
     private JavaMailSender javaMailSender;
