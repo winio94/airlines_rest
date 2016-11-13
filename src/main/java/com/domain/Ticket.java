@@ -18,6 +18,9 @@ public class Ticket {
     @JoinColumn(unique = true)
     private Reservation reservation;
 
+    @NotNull
+    private Boolean wasSent = Boolean.FALSE;
+
     public Long getId() {
         return id;
     }
@@ -32,5 +35,13 @@ public class Ticket {
 
     public void setReservation(Reservation reservation) {
         this.reservation = reservation;
+    }
+
+    public Boolean getWasSent() {
+        return wasSent;
+    }
+
+    public void setWasSent(Boolean wasSent) {
+        this.wasSent = wasSent;
     }
 }

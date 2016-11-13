@@ -17,6 +17,8 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -27,8 +29,11 @@ import static org.mockito.Mockito.*;
 public class MailSendTaskTest {
 
     private static final String EMAIL_ADDRESS = "email@default.com";
+    private static final String EMAIL_ADDRESS2 = "email2@default2.com";
     private static final String FIRST_NAME = "John";
+    private static final String FIRST_NAME2 = "John";
     private static final String LAST_NAME = "Doe";
+    private static final String LAST_NAME2 = "Doe";
 
     @Mock
     private MailSenderService mailSender;
@@ -42,7 +47,7 @@ public class MailSendTaskTest {
     @Test
     public void shouldSendMailForEveryNewTicket() throws Exception {
         List<Ticket> ticketList = ticketList(5);
-        when(ticketRepository.findAll()).thenReturn(ticketList);
+        when(ticketRepository.findTicketsByWasSentFalse()).thenReturn(ticketList);
 
         mailSendTask.createMailTask();
 
@@ -54,11 +59,27 @@ public class MailSendTaskTest {
         String subject = subject(FIRST_NAME, LAST_NAME);
         InternetAddress address = internetAddress(EMAIL_ADDRESS);
         Reservation reservation = reservation(EMAIL_ADDRESS, asList(passenger(FIRST_NAME, LAST_NAME)));
-        setUpNewTicketsInDb(ticket(reservation));
+        Ticket ticket = ticket(reservation);
+        setUpNewTicketsInDb(ticket);
 
         mailSendTask.createMailTask();
 
         verify(mailSender).send(address, subject, reservation.toString());
+        assertThat(ticket.getWasSent(), is(true));
+    }
+
+    @Test
+    public void shouldSetTicketsSendFlagToTrueAfterSendingMessagesForNewTickets() throws Exception {
+        Reservation reservation1 = reservation(EMAIL_ADDRESS, singletonList(passenger(FIRST_NAME, LAST_NAME)));
+        Reservation reservation2 = reservation(EMAIL_ADDRESS2, singletonList(passenger(FIRST_NAME2, LAST_NAME2)));
+        Ticket ticket1 = ticket(reservation1);
+        Ticket ticket2 = ticket(reservation2);
+        setUpNewTicketsInDb(ticket1, ticket2);
+
+        mailSendTask.createMailTask();
+
+        assertThat(ticket1.getWasSent(), is(true));
+        assertThat(ticket2.getWasSent(), is(true));
     }
 
     private Reservation reservation(String address, List<Passenger> passengers) {
@@ -99,8 +120,8 @@ public class MailSendTaskTest {
         return tickets;
     }
 
-    private void setUpNewTicketsInDb(Ticket ticket) {
-        when(ticketRepository.findAll()).thenReturn(singletonList(ticket));
+    private void setUpNewTicketsInDb(Ticket... tickets) {
+        when(ticketRepository.findTicketsByWasSentFalse()).thenReturn(asList(tickets));
     }
 
     private Ticket ticket(Reservation reservation) {

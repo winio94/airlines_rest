@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.util.constants.NumberConstants.SENDING_MAIL_INTERVAL;
+import static java.lang.Boolean.TRUE;
 import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
 
@@ -49,13 +50,14 @@ public class MailSendTask {
     }
 
     private List<Ticket> newTickets() {
-        return (List<Ticket>) ticketRepository.findAll();
+        return ticketRepository.findTicketsByWasSentFalse();
     }
 
     private void sendMailWithTicket(Ticket ticket) {
         try {
             Reservation reservation = ticket.getReservation();
             mailSender.send(getAddress(reservation), getSubject(reservation), reservation.toString());
+            ticket.setWasSent(TRUE);
         } catch (MessagingException e) {
             e.printStackTrace();
         }
