@@ -1,8 +1,9 @@
-package com.service;
+package com.controller;
 
 import com.domain.Reservation;
 import com.domain.Ticket;
 import com.repository.ReservationRepository;
+import com.service.TicketService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

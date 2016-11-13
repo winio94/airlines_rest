@@ -10,8 +10,8 @@ import java.util.Date;
 import java.util.Objects;
 
 import static com.util.StringUtil.md5HashedString;
-import static com.util.constants.Constants.NULL_RESERVATION_MESSAGE;
-import static com.util.constants.Constants.RESERVATION_VALIDATION_MESSAGE;
+import static com.util.constants.MessageConstants.NULL_RESERVATION_MESSAGE;
+import static com.util.constants.MessageConstants.RESERVATION_VALIDATION_MESSAGE;
 
 /**
  * Created by Michał on 2016-11-11.
