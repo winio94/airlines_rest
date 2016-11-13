@@ -10,10 +10,10 @@ import com.repository.FlightRepository;
 import com.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -27,7 +27,7 @@ import static java.time.temporal.ChronoUnit.MINUTES;
  * Created by Michał on 2016-10-16.
  */
 
-@Component
+@Named
 public class InitializationService {
 
     private static final String CITIES_FILE_PATH = "bigCities.txt";
@@ -39,13 +39,13 @@ public class InitializationService {
     private List<Airport> airports = new ArrayList<>();
     private List<Customer> customers = new ArrayList<>();
 
-    @Autowired
+    @Inject
     private CustomerRepository customerRepository;
 
-    @Autowired
+    @Inject
     private FlightRepository flightRepository;
 
-    @Autowired
+    @Inject
     private AirportRepository airportRepository;
 
     public InitializationService() throws IOException {
