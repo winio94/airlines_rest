@@ -4,6 +4,7 @@ import com.domain.Ticket;
 import com.repository.TicketRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
@@ -12,8 +13,10 @@ import javax.inject.Named;
 @Named
 @Transactional
 public class TicketServiceImpl implements TicketService {
+
     private final TicketRepository ticketRepository;
 
+    @Inject
     public TicketServiceImpl(TicketRepository ticketRepository) {
         this.ticketRepository = ticketRepository;
     }
