@@ -43,24 +43,29 @@ public class MailSendTask {
     @Scheduled(fixedRate = SENDING_MAIL_INTERVAL)
     public void createMailTask() {
         LOGGER.debug("Sending email task starter.");
-        ofNullable(newTickets())
+        ofNullable(notSentTickets())
                 .orElse(emptyList())
-                .forEach(this::sendMailWithTicket);
+                .forEach(this::sendEmailFor);
         LOGGER.debug("Sending email task ended.");
     }
 
-    private List<Ticket> newTickets() {
+    private List<Ticket> notSentTickets() {
         return ticketRepository.findTicketsByWasSentFalse();
     }
 
-    private void sendMailWithTicket(Ticket ticket) {
+    private void sendEmailFor(Ticket ticket) {
         try {
             Reservation reservation = ticket.getReservation();
-            mailSender.send(getAddress(reservation), getSubject(reservation), reservation.toString());
+            sendEmailFor(reservation);
             ticket.setWasSent(TRUE);
         } catch (MessagingException e) {
-            e.printStackTrace();
+            String errorMessage = "Could not create email message for given ticket: {}. Error message: {}.";
+            LOGGER.error(errorMessage, ticket, e.getMessage());
         }
+    }
+
+    private void sendEmailFor(Reservation reservation) throws MessagingException {
+        mailSender.send(getAddress(reservation), getSubject(reservation), reservation.toString());
     }
 
     private String getSubject(Reservation reservation) {
