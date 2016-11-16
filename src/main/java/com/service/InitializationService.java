@@ -1,15 +1,14 @@
 package com.service;
 
-import com.domain.Airport;
-import com.domain.Customer;
-import com.domain.Flight;
-import com.domain.FlightClass;
+import com.domain.*;
 import com.repository.AirportRepository;
 import com.repository.CustomerRepository;
 import com.repository.FlightRepository;
+import com.repository.UserRepository;
 import com.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -32,7 +31,7 @@ public class InitializationService {
 
     private static final String CITIES_FILE_PATH = "bigCities.txt";
     private static final Logger LOGGER = LoggerFactory.getLogger(InitializationService.class);
-    public static final int MAX_PRICE = 1000;
+    private static final int MAX_PRICE = 1000;
     private final Random random = new Random();
     private List<String> cities = new ArrayList<>();
     private List<Flight> flights = new ArrayList<>();
@@ -48,15 +47,24 @@ public class InitializationService {
     @Inject
     private AirportRepository airportRepository;
 
+    @Inject
+    private UserRepository userRepository;
+
     public InitializationService() throws IOException {
     }
 
     @PostConstruct
     private void initialize() {
+        initializeUsers();
         initializeCities();
         initializeAirports();
         initializeCustomers();
         initializeFlights();
+    }
+
+    private void initializeUsers() {
+        userRepository.save(user());
+        userRepository.save(admin());
     }
 
     private void initializeCities() {
@@ -90,6 +98,22 @@ public class InitializationService {
             flight.setFlightClass(flightClass);
             flightRepository.save(flight);
         });
+    }
+
+    private User user() {
+        User user = new User();
+        user.setEmail("user@user.com");
+        user.setPassword(new BCryptPasswordEncoder().encode("userpass"));
+        user.setRole(Role.USER);
+        return user;
+    }
+
+    private User admin() {
+        User admin = new User();
+        admin.setEmail("admin@admin.com");
+        admin.setPassword(new BCryptPasswordEncoder().encode("adminpass"));
+        admin.setRole(Role.ADMIN);
+        return admin;
     }
 
     private Airport airport(int i) {
