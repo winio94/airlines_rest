@@ -3,6 +3,7 @@ package com.domain;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 
 /**
  * Created by Michał on 2016-11-14.
@@ -15,19 +16,14 @@ public class User {
     private Long id;
 
     @NotEmpty
-    @Column(nullable = false, unique = true)
+    @Pattern(regexp = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", message = "Wrong email value.")
     private String email;
 
-    @Column(unique = true)
-    private String userName;
-
     @NotEmpty
-    @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role = Role.USER;
 
     public Long getId() {
         return id;
@@ -43,14 +39,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public String getPassword() {

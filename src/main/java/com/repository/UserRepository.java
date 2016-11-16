@@ -9,6 +9,4 @@ import org.springframework.data.repository.query.Param;
  */
 public interface UserRepository extends CrudRepository<User, Long> {
     User findUserByEmail(@Param("email") String email);
-
-    User findUserByUserName(@Param("userName") String userName);
 }

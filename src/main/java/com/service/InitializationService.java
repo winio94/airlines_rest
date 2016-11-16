@@ -102,7 +102,6 @@ public class InitializationService {
 
     private User user() {
         User user = new User();
-        user.setUserName("user");
         user.setEmail("user@user.com");
         user.setPassword(new BCryptPasswordEncoder().encode("userpass"));
         user.setRole(Role.USER);
@@ -111,7 +110,6 @@ public class InitializationService {
 
     private User admin() {
         User admin = new User();
-        admin.setUserName("admin");
         admin.setEmail("admin@admin.com");
         admin.setPassword(new BCryptPasswordEncoder().encode("adminpass"));
         admin.setRole(Role.ADMIN);

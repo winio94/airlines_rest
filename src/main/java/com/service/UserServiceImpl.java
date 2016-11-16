@@ -29,11 +29,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByUserName(String userName) {
-        return userRepository.findUserByUserName(userName);
-    }
-
-    @Override
     public List<User> getAllUsers() {
         return (List<User>) userRepository.findAll();
     }
@@ -43,7 +38,6 @@ public class UserServiceImpl implements UserService {
         User u = new User();
         u.setEmail(user.getEmail());
         u.setRole(u.getRole());
-        u.setUserName(user.getUserName());
         u.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         u.setRole(Role.USER);
         return userRepository.save(u);
