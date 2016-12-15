@@ -1,6 +1,7 @@
 package com.domain;
 
 import com.domain.listener.ReservationListener;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -44,7 +45,13 @@ public class Reservation {
     private Contact contact;
 
     @NotNull
+    @JsonFormat(pattern = "YYYY-MM-dd HH:mm")
     private Date reservationDate;
+
+    @ManyToOne
+    @NotNull
+    @JoinColumn(nullable = false)
+    private Customer customer;
 
     public Long getId() {
         return id;
@@ -108,5 +115,13 @@ public class Reservation {
 
     public void setReservationDate(Date reservationDate) {
         this.reservationDate = reservationDate;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 }
