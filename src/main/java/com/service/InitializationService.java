@@ -29,12 +29,19 @@ import static java.time.temporal.ChronoUnit.MINUTES;
 @Named
 public class InitializationService {
 
-    private static final String CITIES_FILE_PATH = "bigCities.txt";
-    private static final Logger LOGGER = LoggerFactory.getLogger(InitializationService.class);
     private static final int MAX_PRICE = 1000;
+    private static final int CUSTOMER_AMOUNT = 10;
+    private static final int FLIGHT_AMOUNT = 1000;
+    private static final String CITIES_FILE_PATH = "bigCities.txt";
+    private static final String PASSWORD = "password";
+    private static final String EMAIL_PREFIX = "email";
+    private static final String EMAIL_SUFFIX = "@gmail.com";
+    private static final String FIRST_NAME = "firstName";
+    private static final String LAST_NAME = "lastName";
+    private static final Logger LOGGER = LoggerFactory.getLogger(InitializationService.class);
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     private final Random random = new Random();
     private List<String> cities = new ArrayList<>();
-    private List<Flight> flights = new ArrayList<>();
     private List<Airport> airports = new ArrayList<>();
     private List<Customer> customers = new ArrayList<>();
 
@@ -55,15 +62,14 @@ public class InitializationService {
 
     @PostConstruct
     private void initialize() {
-        initializeUsers();
+        initializeAdmin();
         initializeCities();
         initializeAirports();
         initializeCustomers();
         initializeFlights();
     }
 
-    private void initializeUsers() {
-        userRepository.save(user());
+    private void initializeAdmin() {
         userRepository.save(admin());
     }
 
@@ -81,29 +87,29 @@ public class InitializationService {
     }
 
     private void initializeCustomers() {
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < CUSTOMER_AMOUNT; i++) {
             Customer customer = customer(i);
             customers.add(customer);
             customerRepository.save(customer);
-            flights.add(flight(i));
         }
     }
 
     private void initializeFlights() {
         FlightClass[] flightClasses = FlightClass.values();
-        flights.forEach(flight -> {
+        for (int i = 0; i < FLIGHT_AMOUNT; i++) {
+            Flight flight = flight(i);
             flight.setFrom(airports.get(random.nextInt(airports.size())));
             flight.setTo(airports.get(random.nextInt(airports.size())));
             FlightClass flightClass = flightClasses[random.nextInt(flightClasses.length)];
             flight.setFlightClass(flightClass);
             flightRepository.save(flight);
-        });
+        }
     }
 
-    private User user() {
+    private User user(String email, String userpass) {
         User user = new User();
-        user.setEmail("user@user.com");
-        user.setPassword(new BCryptPasswordEncoder().encode("userpass"));
+        user.setEmail(email);
+        user.setPassword(encoder.encode(userpass));
         user.setRole(Role.USER);
         return user;
     }
@@ -111,7 +117,7 @@ public class InitializationService {
     private User admin() {
         User admin = new User();
         admin.setEmail("admin@admin.com");
-        admin.setPassword(new BCryptPasswordEncoder().encode("adminpass"));
+        admin.setPassword(encoder.encode("adminpass"));
         admin.setRole(Role.ADMIN);
         return admin;
     }
@@ -150,8 +156,18 @@ public class InitializationService {
 
     private Customer customer(int counter) {
         Customer customer = new Customer();
-        customer.setFirstName("firstName" + counter);
-        customer.setLastName("lastName" + counter);
+        customer.setFirstName(FIRST_NAME + counter);
+        customer.setLastName(LAST_NAME + counter);
+        User user = user(getEmail(counter), getUserPassword(counter));
+        customer.setUser(user);
         return customer;
+    }
+
+    private String getEmail(int counter) {
+        return EMAIL_PREFIX + counter + EMAIL_SUFFIX;
+    }
+
+    private String getUserPassword(int counter) {
+        return PASSWORD + counter;
     }
 }
