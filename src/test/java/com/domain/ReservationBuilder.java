@@ -1,6 +1,6 @@
 package com.domain;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
@@ -13,7 +13,7 @@ public final class ReservationBuilder {
     private Flight flight;
     private String reservationCode;
     private Contact contact;
-    private Date reservationDate;
+    private LocalDateTime reservationDate;
 
     private ReservationBuilder() {
     }
@@ -52,7 +52,7 @@ public final class ReservationBuilder {
         return this;
     }
 
-    public ReservationBuilder withReservationDate(Date reservationDate) {
+    public ReservationBuilder withReservationDate(LocalDateTime reservationDate) {
         this.reservationDate = reservationDate;
         return this;
     }

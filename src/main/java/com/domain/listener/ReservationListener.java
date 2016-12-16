@@ -6,7 +6,7 @@ import com.domain.Reservation;
 import javax.persistence.PersistenceException;
 import javax.persistence.PrePersist;
 import javax.validation.ValidationException;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import static com.util.StringUtil.md5HashedString;
@@ -39,7 +39,7 @@ public class ReservationListener {
 
     private String createReservationCode(Reservation reservation) {
         Contact contact = reservation.getContact();
-        Date reservationDate = reservation.getReservationDate();
+        LocalDateTime reservationDate = reservation.getReservationDate();
         String reservationCodeBeforeHash = contact.getEmail() + contact.getPhone() + reservationDate.toString();
         return md5HashedString(reservationCodeBeforeHash);
     }

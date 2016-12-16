@@ -9,7 +9,7 @@ import org.springframework.util.DigestUtils;
 
 import javax.persistence.PersistenceException;
 import javax.validation.ValidationException;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -28,7 +28,7 @@ public class ReservationListenerTest {
     public void setUp() throws Exception {
         reservationListener = new ReservationListener();
         reservation = new Reservation();
-        setUpReservationWithDate(new Date());
+        setUpReservationWithDate(LocalDateTime.now());
         setUpReservationWithContact(contact(PROPER_EMAIL, PROPER_PHONE));
     }
 
@@ -59,7 +59,7 @@ public class ReservationListenerTest {
         assertEquals(md5ReservationCode(), reservation.getReservationCode());
     }
 
-    private void setUpReservationWithDate(Date date) {
+    private void setUpReservationWithDate(LocalDateTime date) {
         reservation.setReservationDate(date);
     }
 
@@ -83,7 +83,7 @@ public class ReservationListenerTest {
     }
 
     private String md5ReservationCode() {
-        Date reservationDate = reservation.getReservationDate();
+        LocalDateTime reservationDate = reservation.getReservationDate();
         Contact contact = reservation.getContact();
         String email = contact.getEmail();
         String phone = contact.getPhone();
