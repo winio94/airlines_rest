@@ -15,9 +15,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.temporal.Temporal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import static java.lang.String.valueOf;
 import static java.time.temporal.ChronoUnit.MINUTES;
@@ -130,28 +130,21 @@ public class InitializationService {
 
     private Flight flight(int counter) {
         Flight flight = new Flight();
-        Date today = new Date();
-        Calendar cal = Calendar.getInstance();
+        LocalDateTime today = LocalDateTime.now();
         flight.setFlightNumber(valueOf(counter));
-        Date departureDate = getDate(counter, today, cal);
+        LocalDateTime departureDate = getDate(counter, today);
         flight.setDepartureDate(departureDate);
-        Date arrivalDate = getDate(counter, departureDate, cal);
+        LocalDateTime arrivalDate = getDate(counter, departureDate);
         flight.setArrivalDate(arrivalDate);
-        long between = MINUTES.between(localDateTime(departureDate), localDateTime(arrivalDate));
+        long between = MINUTES.between(departureDate, arrivalDate);
         flight.setDuration((int) between);
         double price = random.nextDouble() * MAX_PRICE;
         flight.setPrice(Math.round(price * 100d) / 100d);
         return flight;
     }
 
-    private Temporal localDateTime(Date date) {
-        return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
-    }
-
-    private Date getDate(int counter, Date today, Calendar cal) {
-        cal.setTime(today);
-        cal.add(Calendar.MINUTE, counter);
-        return cal.getTime();
+    private LocalDateTime getDate(int counter, LocalDateTime today) {
+        return LocalDateTime.from(today).plusMinutes(counter);
     }
 
     private Customer customer(int counter) {
