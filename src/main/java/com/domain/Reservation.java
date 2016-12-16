@@ -1,12 +1,14 @@
 package com.domain;
 
 import com.domain.listener.ReservationListener;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
@@ -45,12 +47,12 @@ public class Reservation {
     private Contact contact;
 
     @NotNull
-    @JsonFormat(pattern = "YYYY-MM-dd HH:mm")
-    private Date reservationDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime reservationDate;
 
     @ManyToOne
-    @NotNull
-    @JoinColumn(nullable = false)
+    @JoinColumn
+    @JsonBackReference
     private Customer customer;
 
     public Long getId() {
@@ -109,11 +111,11 @@ public class Reservation {
         this.contact = contact;
     }
 
-    public Date getReservationDate() {
+    public LocalDateTime getReservationDate() {
         return reservationDate;
     }
 
-    public void setReservationDate(Date reservationDate) {
+    public void setReservationDate(LocalDateTime reservationDate) {
         this.reservationDate = reservationDate;
     }
 
@@ -123,5 +125,14 @@ public class Reservation {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    @JsonProperty("active")
+    @Transient
+    public boolean getActive() {
+        LocalDateTime date = Reservation.this.getFlight().getDepartureDate();
+        LocalDateTime now = LocalDateTime.from(LocalDateTime.now());
+        LocalDateTime departureMinusDay = LocalDateTime.from(date).minusDays(1L);
+        return now.isBefore(departureMinusDay);
     }
 }
