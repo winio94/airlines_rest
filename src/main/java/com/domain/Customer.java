@@ -1,5 +1,7 @@
 package com.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
@@ -23,6 +25,7 @@ public class Customer {
     private User user;
 
     @OneToMany(mappedBy = "customer")
+    @JsonManagedReference
     private Set<Reservation> reservations;
 
     public Long getId() {
