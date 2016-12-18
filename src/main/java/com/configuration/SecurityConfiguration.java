@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.CorsFilter;
 
 import javax.inject.Inject;
@@ -20,6 +22,7 @@ import javax.inject.Inject;
  */
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Inject
@@ -47,11 +50,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers(HttpMethod.POST, "/flights").access("hasAuthority('ADMIN')")
             .antMatchers(HttpMethod.DELETE, "/flights").access("hasAuthority('ADMIN')")
             .antMatchers(HttpMethod.GET, "/flights/**").permitAll()
+            .antMatchers(HttpMethod.GET, "/customers/**").permitAll()
             .antMatchers(HttpMethod.GET, "/customers").access("hasAuthority('ADMIN')")
             .antMatchers(HttpMethod.POST, "/customers").access("hasAuthority('ADMIN')")
             .antMatchers(HttpMethod.PUT, "/customers").access("hasAuthority('ADMIN')")
             .antMatchers(HttpMethod.DELETE, "/customers").access("hasAuthority('ADMIN')")
             .antMatchers(HttpMethod.POST, "/reservations").permitAll()
+            .antMatchers(HttpMethod.DELETE, "/reservations/*").permitAll()
             .antMatchers(HttpMethod.GET, "/airports/**").permitAll()
             .antMatchers(HttpMethod.GET, "/user").permitAll()
             .antMatchers(HttpMethod.POST, "/users").permitAll()
@@ -63,8 +68,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .httpBasic()
             .and()
             .logout()
+            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+            .logoutSuccessUrl("/flights")
             .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)))
-            .permitAll()
             .invalidateHttpSession(true);
     }
 }
