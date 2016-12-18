@@ -132,9 +132,9 @@ public class InitializationService {
         Flight flight = new Flight();
         LocalDateTime today = LocalDateTime.now();
         flight.setFlightNumber(valueOf(counter));
-        LocalDateTime departureDate = getDate(counter, today);
+        LocalDateTime departureDate = getDatePlusHours(counter, today);
         flight.setDepartureDate(departureDate);
-        LocalDateTime arrivalDate = getDate(counter, departureDate);
+        LocalDateTime arrivalDate = getDatePlusMinutes(counter, departureDate);
         flight.setArrivalDate(arrivalDate);
         long between = MINUTES.between(departureDate, arrivalDate);
         flight.setDuration((int) between);
@@ -143,8 +143,19 @@ public class InitializationService {
         return flight;
     }
 
-    private LocalDateTime getDate(int counter, LocalDateTime today) {
-        return LocalDateTime.from(today).plusMinutes(counter);
+    private LocalDateTime getDatePlusDays(int days, LocalDateTime time) {
+        return LocalDateTime.from(time)
+                            .plusDays(days);
+    }
+
+    private LocalDateTime getDatePlusHours(int hours, LocalDateTime time) {
+        return LocalDateTime.from(time)
+                            .plusHours(hours);
+    }
+
+    private LocalDateTime getDatePlusMinutes(int minutes, LocalDateTime time) {
+        return LocalDateTime.from(time)
+                            .plusMinutes(minutes);
     }
 
     private Customer customer(int counter) {
