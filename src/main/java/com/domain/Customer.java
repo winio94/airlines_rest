@@ -1,10 +1,10 @@
 package com.domain;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 /**
  * Created by Michał on 2016-10-02.
@@ -16,11 +16,17 @@ public class Customer {
     @GeneratedValue
     private Long id;
 
-    @NotEmpty
     private String firstName;
-
-    @NotEmpty
     private String lastName;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @NotNull
+    @JoinColumn(nullable = false, unique = true)
+    private User user;
+
+    @OneToMany(mappedBy = "customer")
+    @JsonManagedReference
+    private Set<Reservation> reservations;
 
     public Long getId() {
         return id;
@@ -44,5 +50,21 @@ public class Customer {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Set<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(Set<Reservation> reservations) {
+        this.reservations = reservations;
     }
 }

@@ -1,8 +1,11 @@
 package com.controller;
 
+import com.domain.Customer;
 import com.domain.User;
+import com.service.CustomerService;
 import com.service.UserService;
 import com.service.UserValidator;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +23,9 @@ public class UserController {
     private UserService userService;
 
     @Inject
+    private CustomerService customerService;
+
+    @Inject
     private UserValidator userValidator;
 
     @InitBinder
@@ -28,12 +34,21 @@ public class UserController {
     }
 
     @PostMapping(value = "/users")
+    @Transactional
     public User createUser(@Valid @RequestBody User user) {
-        return userService.create(user);
+        User entity = userService.create(user);
+        createCustomerFor(entity);
+        return entity;
     }
 
     @RequestMapping("/user")
-    public Principal user(Principal user) {
-        return user;
+    public Principal user(Principal principal) {
+        return principal;
+    }
+
+    private void createCustomerFor(User u) {
+        Customer customer = new Customer();
+        customer.setUser(u);
+        customerService.create(customer);
     }
 }
