@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.List;
 
 /**
  * Created by Michał on 2016-11-12.
@@ -24,5 +25,10 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public Ticket save(Ticket ticket) {
         return ticketRepository.save(ticket);
+    }
+
+    @Override
+    public List<Ticket> findTicketsByWasSentFalse() {
+        return ticketRepository.findTicketsByWasSentFalse();
     }
 }

@@ -1,10 +1,6 @@
 package com.service;
 
 import com.domain.*;
-import com.repository.AirportRepository;
-import com.repository.CustomerRepository;
-import com.repository.FlightRepository;
-import com.repository.UserRepository;
 import com.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,16 +42,16 @@ public class InitializationService {
     private List<Customer> customers = new ArrayList<>();
 
     @Inject
-    private CustomerRepository customerRepository;
+    private CustomerService customerService;
 
     @Inject
-    private FlightRepository flightRepository;
+    private FlightService flightService;
 
     @Inject
-    private AirportRepository airportRepository;
+    private AirportService airportService;
 
     @Inject
-    private UserRepository userRepository;
+    private UserService userService;
 
     public InitializationService() throws IOException {
     }
@@ -70,7 +66,7 @@ public class InitializationService {
     }
 
     private void initializeAdmin() {
-        userRepository.save(admin());
+        userService.create(admin());
     }
 
     private void initializeCities() {
@@ -82,7 +78,7 @@ public class InitializationService {
         for (int i = 0; i < cities.size(); i++) {
             Airport airport = airport(i);
             airports.add(airport);
-            airportRepository.save(airport);
+            airportService.create(airport);
         }
     }
 
@@ -90,7 +86,7 @@ public class InitializationService {
         for (int i = 0; i < CUSTOMER_AMOUNT; i++) {
             Customer customer = customer(i);
             customers.add(customer);
-            customerRepository.save(customer);
+            customerService.create(customer);
         }
     }
 
@@ -102,7 +98,7 @@ public class InitializationService {
             flight.setTo(airports.get(random.nextInt(airports.size())));
             FlightClass flightClass = flightClasses[random.nextInt(flightClasses.length)];
             flight.setFlightClass(flightClass);
-            flightRepository.save(flight);
+            flightService.create(flight);
         }
     }
 
@@ -117,7 +113,7 @@ public class InitializationService {
     private User admin() {
         User admin = new User();
         admin.setEmail("admin@admin.com");
-        admin.setPassword(encoder.encode("adminpass"));
+        admin.setPassword("adminpass");
         admin.setRole(Role.ADMIN);
         return admin;
     }

@@ -4,7 +4,6 @@ import com.domain.Contact;
 import com.domain.Passenger;
 import com.domain.Reservation;
 import com.domain.Ticket;
-import com.repository.TicketRepository;
 import com.util.constants.MessageConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +36,7 @@ public class MailSendTask {
     private MailSenderService mailSender;
 
     @Inject
-    private TicketRepository ticketRepository;
+    private TicketService ticketService;
 
     @Transactional
     @Scheduled(fixedRate = SENDING_MAIL_INTERVAL)
@@ -50,7 +49,7 @@ public class MailSendTask {
     }
 
     private List<Ticket> notSentTickets() {
-        return ticketRepository.findTicketsByWasSentFalse();
+        return ticketService.findTicketsByWasSentFalse();
     }
 
     private void sendEmailFor(Ticket ticket) {

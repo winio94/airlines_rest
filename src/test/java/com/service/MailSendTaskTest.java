@@ -1,7 +1,6 @@
 package com.service;
 
 import com.domain.*;
-import com.repository.TicketRepository;
 import com.util.constants.MessageConstants;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +38,7 @@ public class MailSendTaskTest {
     private MailSenderService mailSender;
 
     @Mock
-    private TicketRepository ticketRepository;
+    private TicketService ticketService;
 
     @InjectMocks
     private MailSendTask mailSendTask;
@@ -47,7 +46,7 @@ public class MailSendTaskTest {
     @Test
     public void shouldSendMailForEveryNewTicket() throws Exception {
         List<Ticket> ticketList = ticketList(5);
-        when(ticketRepository.findTicketsByWasSentFalse()).thenReturn(ticketList);
+        when(ticketService.findTicketsByWasSentFalse()).thenReturn(ticketList);
 
         mailSendTask.createMailTask();
 
@@ -121,7 +120,7 @@ public class MailSendTaskTest {
     }
 
     private void setUpNewTicketsInDb(Ticket... tickets) {
-        when(ticketRepository.findTicketsByWasSentFalse()).thenReturn(asList(tickets));
+        when(ticketService.findTicketsByWasSentFalse()).thenReturn(asList(tickets));
     }
 
     private Ticket ticket(Reservation reservation) {
