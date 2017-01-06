@@ -35,7 +35,6 @@ public class InitializationService {
     private static final String FIRST_NAME = "firstName";
     private static final String LAST_NAME = "lastName";
     private static final Logger LOGGER = LoggerFactory.getLogger(InitializationService.class);
-    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     private final Random random = new Random();
     private List<String> cities = new ArrayList<>();
     private List<Airport> airports = new ArrayList<>();
@@ -53,6 +52,9 @@ public class InitializationService {
     @Inject
     private UserService userService;
 
+    @Inject
+    private BCryptPasswordEncoder encoder;
+
     public InitializationService() throws IOException {
     }
 
@@ -66,7 +68,10 @@ public class InitializationService {
     }
 
     private void initializeAdmin() {
-        userService.create(admin());
+        User admin = admin();
+        Customer adminCustomer = new Customer();
+        adminCustomer.setUser(admin);
+        customerService.create(adminCustomer);
     }
 
     private void initializeCities() {
@@ -84,9 +89,7 @@ public class InitializationService {
 
     private void initializeCustomers() {
         for (int i = 0; i < CUSTOMER_AMOUNT; i++) {
-            Customer customer = customer(i);
-            customers.add(customer);
-            customerService.create(customer);
+            customerService.create(customer(i));
         }
     }
 
@@ -102,20 +105,20 @@ public class InitializationService {
         }
     }
 
+    private User admin() {
+        User admin = new User();
+        admin.setEmail("admin@admin.com");
+        admin.setPassword(encoder.encode("adminpass"));
+        admin.setRole(Role.ADMIN);
+        return admin;
+    }
+
     private User user(String email, String userpass) {
         User user = new User();
         user.setEmail(email);
         user.setPassword(encoder.encode(userpass));
         user.setRole(Role.USER);
         return user;
-    }
-
-    private User admin() {
-        User admin = new User();
-        admin.setEmail("admin@admin.com");
-        admin.setPassword("adminpass");
-        admin.setRole(Role.ADMIN);
-        return admin;
     }
 
     private Airport airport(int i) {
