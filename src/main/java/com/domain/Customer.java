@@ -24,7 +24,7 @@ public class Customer {
     @JoinColumn(nullable = false, unique = true)
     private User user;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     @JsonManagedReference
     private Set<Reservation> reservations;
 
@@ -66,5 +66,22 @@ public class Customer {
 
     public void setReservations(Set<Reservation> reservations) {
         this.reservations = reservations;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if ((o == null) || (getClass() != o.getClass())) {
+            return false;
+        }
+        Customer customer = (Customer) o;
+        return user.equals(customer.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return user.hashCode();
     }
 }
