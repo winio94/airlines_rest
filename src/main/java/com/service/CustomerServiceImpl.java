@@ -20,7 +20,7 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerRepository customerRepository;
 
     @Override
-    public boolean canAccessCustomerPage(CurrentUser currentUser, Long userId) {
+    public boolean canAccessCustomer(CurrentUser currentUser, Long userId) {
         return Objects.nonNull(currentUser) && (isAdmin(currentUser) || currentUser.getId().equals(userId));
     }
 
@@ -37,4 +37,10 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer findCustomerByUserId(Long id) {
         return customerRepository.findCustomerByUserId(id);
     }
+
+    @Override
+    public void delete(Long id) {
+        customerRepository.delete(id);
+    }
+
 }
