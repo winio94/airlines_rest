@@ -5,6 +5,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import javax.inject.Named;
+import java.util.Objects;
 
 /**
  * Created by Michał on 2017-01-02.
@@ -22,7 +23,7 @@ public class PasswordValidator implements Validator {
         PasswordChangeDto dto = PasswordChangeDto.class.cast(target);
         String newPassword = dto.getNewPassword();
         String newPasswordRetype = dto.getNewPasswordRetype();
-        if (!(newPassword.equals(newPasswordRetype))) {
+        if (Objects.isNull(newPassword) &&!(newPassword.equals(newPasswordRetype))) {
             errors.rejectValue("newPasswordRetype", "newPasswordRetype.value", "Confirmation password was wrong.");
         }
     }
