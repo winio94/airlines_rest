@@ -12,7 +12,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +21,7 @@ import javax.servlet.ServletException;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -40,9 +40,6 @@ public class CustomerController {
     @Inject
     private SessionRegistry sessionRegistry;
 
-    @Inject
-    private BCryptPasswordEncoder encoder;
-
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
         binder.addValidators(passwordValidator);
@@ -50,8 +47,10 @@ public class CustomerController {
 
     @PreAuthorize("@customerServiceImpl.canAccessCustomer(principal, #id)")
     @GetMapping("/customers/{id}")
-    public @ResponseBody PersistentEntityResource getUserPage(Principal principal, @PathVariable Long id,
-                                                              PersistentEntityResourceAssembler assembler) {
+    public
+    @ResponseBody
+    PersistentEntityResource getUserPage(Principal principal, @PathVariable Long id,
+                                         PersistentEntityResourceAssembler assembler) {
         return assembler.toResource(customerService.findCustomerByUserId(id));
     }
 
@@ -64,7 +63,7 @@ public class CustomerController {
         if (haveDifferentPasswords(passwordChangeDto, user)) {
             return new ResponseEntity<>(new FieldError("oldPassword", "Wrong old password."), HttpStatus.BAD_REQUEST);
         }
-        user.setPassword(encoder.encode(passwordChangeDto.getNewPassword()));
+        user.setPassword(passwordChangeDto.getNewPassword());
         expireAllSessionsForPrincipal(principal);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -76,7 +75,7 @@ public class CustomerController {
     }
 
     private boolean haveDifferentPasswords(@Valid @RequestBody PasswordChangeDto passwordChangeDto, User user) {
-        return !encoder.matches(passwordChangeDto.getOldPassword(), user.getPassword());
+        return !Objects.equals(passwordChangeDto.getOldPassword(), user.getPassword());
     }
 
     private void expireAllSessionsForPrincipal(Principal principal) {

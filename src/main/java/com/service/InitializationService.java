@@ -4,7 +4,6 @@ import com.domain.*;
 import com.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -52,8 +51,8 @@ public class InitializationService {
     @Inject
     private UserService userService;
 
-    @Inject
-    private BCryptPasswordEncoder encoder;
+//    @Inject
+//    private BCryptPasswordEncoder encoder;
 
     public InitializationService() throws IOException {
     }
@@ -108,7 +107,7 @@ public class InitializationService {
     private User admin() {
         User admin = new User();
         admin.setEmail("admin@admin.com");
-        admin.setPassword(encoder.encode("adminpass"));
+        admin.setPassword("adminpass");
         admin.setRole(Role.ADMIN);
         return admin;
     }
@@ -116,7 +115,7 @@ public class InitializationService {
     private User user(String email, String userpass) {
         User user = new User();
         user.setEmail(email);
-        user.setPassword(encoder.encode(userpass));
+        user.setPassword(userpass);
         user.setRole(Role.USER);
         return user;
     }

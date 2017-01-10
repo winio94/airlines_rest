@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
@@ -39,7 +38,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
+        auth.userDetailsService(userDetailsService);//.passwordEncoder(encoder());
     }
 
     @Override
@@ -105,15 +104,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return invalidSessionStrategy;
     }
 
-    @Bean
-    public BCryptPasswordEncoder encoder() {
-        return new BCryptPasswordEncoderIml();
-    }
-
-    private class BCryptPasswordEncoderIml extends BCryptPasswordEncoder {
-        @Override
-        public String encode(CharSequence rawPassword) {
-            return String.valueOf(rawPassword);
-        }
-    }
 }

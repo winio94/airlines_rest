@@ -3,7 +3,6 @@ package com.service;
 import com.domain.Role;
 import com.domain.User;
 import com.repository.UserRepository;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -18,8 +17,8 @@ public class UserServiceImpl implements UserService {
     @Inject
     private UserRepository userRepository;
 
-    @Inject
-    private BCryptPasswordEncoder encoder;
+//    @Inject
+//    private BCryptPasswordEncoder encoder;
 
     @Override
     public User getUserById(Long id) {
@@ -40,7 +39,7 @@ public class UserServiceImpl implements UserService {
     public User create(User user) {
         User u = new User();
         u.setEmail(user.getEmail());
-        u.setPassword(encoder.encode(user.getPassword()));
+        u.setPassword(user.getPassword());
         u.setRole(Role.USER);
         return userRepository.save(u);
     }
