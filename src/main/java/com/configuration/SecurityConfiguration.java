@@ -107,6 +107,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public BCryptPasswordEncoder encoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoderIml();
+    }
+
+    private class BCryptPasswordEncoderIml extends BCryptPasswordEncoder {
+        @Override
+        public String encode(CharSequence rawPassword) {
+            return String.valueOf(rawPassword);
+        }
     }
 }
