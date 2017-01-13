@@ -1,7 +1,9 @@
 package com.controller;
 
 import com.domain.Reservation;
+import com.domain.Ticket;
 import com.service.ReservationService;
+import com.service.TicketService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,11 +25,16 @@ public class ReservationController {
     @Inject
     private ReservationService reservationService;
 
+    @Inject
+    private TicketService ticketService;
+
     @PreAuthorize("@reservationServiceImpl.canDeletedReservation(principal, #id)")
     @DeleteMapping(value = "/reservations/{id}")
     public ResponseEntity<String> removeReservation(Principal principal, @PathVariable Long id, @RequestBody String reservationCode) {
         Reservation reservation = reservationService.findReservationByReservationCode(reservationCode);
         if (Objects.nonNull(reservation) && reservation.getId().equals(id)) {
+            Ticket ticketByReservationId = ticketService.findTicketByReservationId(reservation.getId());
+            ticketService.delete(ticketByReservationId);
             reservationService.delete(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } else {

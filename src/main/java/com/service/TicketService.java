@@ -11,4 +11,8 @@ public interface TicketService {
     Ticket save(Ticket ticket);
 
     List<Ticket> findTicketsByWasSentFalse();
+
+    Ticket findTicketByReservationId(Long id);
+
+    void delete(Ticket ticket);
 }

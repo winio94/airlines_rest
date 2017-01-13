@@ -31,4 +31,14 @@ public class TicketServiceImpl implements TicketService {
     public List<Ticket> findTicketsByWasSentFalse() {
         return ticketRepository.findTicketsByWasSentFalse();
     }
+
+    @Override
+    public Ticket findTicketByReservationId(Long id) {
+        return ticketRepository.findTicketByReservationId(id);
+    }
+
+    @Override
+    public void delete(Ticket ticket) {
+        ticketRepository.delete(ticket);
+    }
 }

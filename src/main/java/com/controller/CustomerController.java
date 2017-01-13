@@ -3,6 +3,8 @@ package com.controller;
 import com.domain.*;
 import com.service.CustomerService;
 import com.service.PasswordValidator;
+import com.service.ReservationService;
+import com.service.TicketService;
 import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
@@ -22,6 +24,7 @@ import javax.servlet.ServletException;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -43,6 +46,12 @@ public class CustomerController {
     @Inject
     private BCryptPasswordEncoder encoder;
 
+    @Inject
+    private ReservationService reservationService;
+
+    @Inject
+    private TicketService ticketService;
+
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
         binder.addValidators(passwordValidator);
@@ -50,8 +59,10 @@ public class CustomerController {
 
     @PreAuthorize("@customerServiceImpl.canAccessCustomer(principal, #id)")
     @GetMapping("/customers/{id}")
-    public @ResponseBody PersistentEntityResource getUserPage(Principal principal, @PathVariable Long id,
-                                                              PersistentEntityResourceAssembler assembler) {
+    public
+    @ResponseBody
+    PersistentEntityResource getUserPage(Principal principal, @PathVariable Long id,
+                                         PersistentEntityResourceAssembler assembler) {
         return assembler.toResource(customerService.findCustomerByUserId(id));
     }
 
@@ -72,7 +83,12 @@ public class CustomerController {
     @PreAuthorize("@customerServiceImpl.canAccessCustomer(principal, #id)")
     @DeleteMapping("/customers/{id}")
     public void deleteCustomer(Principal principal, @PathVariable Long id) {
-        customerService.delete(id);
+        Set<Reservation> reservationsByCustomerId = reservationService.findReservationsByCustomerId(id);
+        reservationsByCustomerId.forEach(res -> {
+            Ticket ticketByReservationId = ticketService.findTicketByReservationId(res.getId());
+            ticketService.delete(ticketByReservationId);
+            reservationService.delete(res.getId());
+        });
     }
 
     private boolean haveDifferentPasswords(@Valid @RequestBody PasswordChangeDto passwordChangeDto, User user) {
