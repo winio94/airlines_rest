@@ -64,7 +64,9 @@ public class MailSendTask {
     }
 
     private void sendEmailFor(Reservation reservation) throws MessagingException {
-        mailSender.send(getAddress(reservation), getSubject(reservation), reservation.toString());
+        String message = "Thank you for using our services. Your reservation code : ";
+        message += reservation.getReservationCode();
+        mailSender.send(getAddress(reservation), getSubject(reservation), message);
     }
 
     private String getSubject(Reservation reservation) {

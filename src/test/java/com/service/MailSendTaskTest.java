@@ -33,6 +33,7 @@ public class MailSendTaskTest {
     private static final String FIRST_NAME2 = "John";
     private static final String LAST_NAME = "Doe";
     private static final String LAST_NAME2 = "Doe";
+    private static final String RESERVATION_CODE = "adskdaskjdasjkdasjk";
 
     @Mock
     private MailSenderService mailSender;
@@ -58,12 +59,13 @@ public class MailSendTaskTest {
         String subject = subject(FIRST_NAME, LAST_NAME);
         InternetAddress address = internetAddress(EMAIL_ADDRESS);
         Reservation reservation = reservation(EMAIL_ADDRESS, asList(passenger(FIRST_NAME, LAST_NAME)));
+        String thankYouMessage = "Thank you for using our services. Your reservation code : ";
         Ticket ticket = ticket(reservation);
         setUpNewTicketsInDb(ticket);
 
         mailSendTask.createMailTask();
 
-        verify(mailSender).send(address, subject, reservation.toString());
+        verify(mailSender).send(address, subject, thankYouMessage + RESERVATION_CODE);
         assertThat(ticket.getWasSent(), is(true));
     }
 
@@ -84,6 +86,7 @@ public class MailSendTaskTest {
     private Reservation reservation(String address, List<Passenger> passengers) {
         return ReservationBuilder.aReservation()
                                  .withContact(contact(address))
+                                 .withReservationCode(RESERVATION_CODE)
                                  .withPassengers(new HashSet<>(passengers))
                                  .build();
     }
