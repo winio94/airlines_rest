@@ -1,3 +1,10 @@
 language: java
 jdk:
-  - oraclejdk8
+- oraclejdk8
+deploy:
+  provider: heroku
+  api_key:
+    secure: fvzAiW8PwknM5jVnVJiRiTW0/vCIE/ODFI10lz53kCt+dzdCq0mYAgRpvm3fwvnt+YZ9AbIyis8L76Hv4MWU8j4sDtlQ2h6dVJY1AewAVEsA/iuK3B0iY6bco07W/WYfhqiN2ui/hsnx/3mEJH91KPIC/20MqXuhY4plZzgZ38biJFzyXXcfFuquhiLVVs8TwgDp6A8mW8lUM7/iv2xmzKrJgFrvdSB7Ch3pX4WVgr3qTwwPGsXkKI5XM9x+iJ6qmB8Lmqo/ksWSHXuXV7jEQ+r2XZtMzpkWsuFPXZIbLVS4FZN0o39cpxcIdLUnKVdVFeaT/H7HA7wBj4b07rmFc86Ai9YPk4700CnT3pW+atvT1/baavv7zN00dH1J+ZPAKyqdA7wualhISDuI2I/ji1MCEEKKobuXd3uzPCjSXBSEvAAuakiWtLctvXS9vyU8Yh53g5XcU78AztX9zZvYh6sXWUHN6hwNtwjfBWnhFX/PHuh1QUp78ycjyPZNZzVSAc8mf1ao2/rCEqa1CmdyaLxUxoCCQVKS+o/kGUKxXhMBW694y+0scgrx009Vz/XNzRUYLZSu/MgZ6tgWYwkzbz9X+Cqt6iGGIdL1HwPeS06gkxnuPZzg6zjoBumdWutNFWg+Ccxe7NfGJ6/bZ5+r0i/7IC5ssZEEhMZgxbsW6bc=
+  app: winio94-airlines
+  on: master
+  strategy: git
