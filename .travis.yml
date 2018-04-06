@@ -8,3 +8,6 @@ deploy:
   app: winio94-airlines
   on: master
   strategy: git
+cache:
+  directories:
+  - $HOME/.m2
