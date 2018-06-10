@@ -1,0 +1,38 @@
+667,Babice Airport,Warsaw,Poland,52.26850128173828,20.910999298095703
+668,Gdańsk Lech Wałęsa Airport,Gdansk,Poland,54.377601623535156,18.46619987487793
+669,John Paul II International Airport Kraków-Balice Airport,Krakow,Poland,50.077701568603516,19.784799575805664
+670,Muchowiec Airport,Katowice,Poland,50.23809814453125,19.03420066833496
+671,Katowice International Airport,Katowice,Poland,50.4743,19.08
+673,Mielec Airport,Mielec,Poland,50.32229995727539,21.462099075317383
+674,Poznań-Ławica Airport,Poznan,Poland,52.421001434299995,16.8262996674
+675,Rzeszów-Jasionka Airport,Rzeszow,Poland,50.1100006104,22.0189990997
+676,Szczecin-Goleniów Solidarność Airport,Szczecin,Poland,53.584701538100006,14.902199745199999
+677,Redzikowo Air Base,Slupsk,Poland,54.47890090942383,17.107500076293945
+678,Swidwin Military Air Base,Shapaja,Poland,53.790599823,15.826299667399999
+679,Warsaw Chopin Airport,Warsaw,Poland,52.1656990051,20.967100143399996
+680,Copernicus Wrocław Airport,Wroclaw,Poland,51.1026992798,16.885799408
+681,Zielona Góra-Babimost Airport,Zielona Gora,Poland,52.138500213600004,15.7986001968
+5591,Bydgoszcz Ignacy Jan Paderewski Airport,Bydgoszcz,Poland,53.096801757799994,17.9776992798
+5592,Łódź Władysław Reymont Airport,Lodz,Poland,51.721900939899996,19.3980998993
+6425,Szczecin-Dąbie Airport,Szczecin,Poland,53.3921012878418,14.63379955291748
+6499,Bielsko Biala Airport,Bielsko-Biala,Poland,49.80500030517578,19.00189971923828
+7685,Koszalin Zegrze Pomorskie Air Base,Koszalin,Poland,54.0425,16.2656
+7812,Oksywie Military Air Base,Gdynia,Poland,54.57970047,18.51720047
+7813,Malbork Military Air Base,Malbork,Poland,54.0269012451,19.134199142499998
+7814,Lask Military Air Base,Lask,Poland,51.551700592,19.179100036599998
+7815,Miroslawiec Military Air Base,Miroslawiec,Poland,53.395099639899996,16.0827999115
+7816,Krzesiny Military Air Base,Poznan,Poland,52.3316993713,16.9664001465
+8029,Radom Airport,RADOM,Poland,51.3891983032,21.213300705
+8414,Modlin Airport,Warsaw,Poland,52.4510993958,20.6518001556
+8633,Inowroclaw Military Air Base,Inowroclaw,Poland,52.8293991089,18.3306007385
+8634,Pruszcz Gdanski Air Base,Pruszcz Gdansk,Poland,54.248001,18.6716
+8751,Góraszka Airport,Goraszka,Poland,52.18444061279297,21.281110763549805
+11103,Szczytno-Szymany International Airport,Szczytno-Szymany,Poland,53.48189926147461,20.937700271606445
+11386,Jelenia Góra Glider Airport,Jelenia Gora,Poland,50.89889907836914,15.785599708557129
+11790,Biała Podlaska Airfield,Biała Podlaska,Poland,52.00078,23.1325278
+11791,Cewice Military Airport,Lębork,Poland,54.416000366199995,17.763299942
+11792,Deblin Military Air Base,Dęblin,Poland,51.551399231,21.8936004639
+11793,Leczyca Military Air Base,Leczyca,Poland,52.004699707,19.1455993652
+11794,Minsk Mazowiecki Military Air Base,,Poland,52.1954994202,21.6558990479
+11795,Powidz Military Air Base,,Poland,52.3793983459,17.8539009094
+11796,Tomaszow Mazowiecki Military Air Base,Tomaszów Mazowiecki,Poland,51.584400177,20.0977993011
