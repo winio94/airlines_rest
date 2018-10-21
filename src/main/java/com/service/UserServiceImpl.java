@@ -1,13 +1,16 @@
 package com.service;
 
-import com.domain.Role;
-import com.domain.User;
-import com.repository.UserRepository;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.List;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import com.domain.Role;
+import com.domain.User;
+import com.repository.UserRepository;
+import com.service.ex.UserNotFoundException;
 
 /**
  * Created by Michał on 2016-11-14.
@@ -23,7 +26,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(Long id) {
-        return userRepository.findOne(id);
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @Override

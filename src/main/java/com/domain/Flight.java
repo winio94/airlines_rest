@@ -1,17 +1,28 @@
 package com.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 /**
  * Created by Michał on 2016-10-02.
  */
 @Entity
 public class Flight {
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Id
     @GeneratedValue
@@ -22,6 +33,7 @@ public class Flight {
 
     @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime departureDate;
 
     @NotNull
@@ -116,5 +128,10 @@ public class Flight {
 
     public Integer getDuration() {
         return duration;
+    }
+
+    @Override
+    public String toString() {
+        return "Flight: " + flightNumber + ", departure: " + departureDate.format(formatter) + ", arrival: " + arrivalDate.format(formatter) + "\n" + from + " ===> " + to;
     }
 }

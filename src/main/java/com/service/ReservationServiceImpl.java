@@ -1,15 +1,16 @@
 package com.service;
 
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Predicate;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import com.domain.CurrentUser;
 import com.domain.Customer;
 import com.domain.Reservation;
 import com.repository.ReservationRepository;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Predicate;
 
 /**
  * Created by Michał on 2016-12-18.
@@ -30,7 +31,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public void delete(Long id) {
-        reservationRepository.delete(id);
+        reservationRepository.deleteById(id);
     }
 
     @Override

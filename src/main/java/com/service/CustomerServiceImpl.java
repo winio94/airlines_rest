@@ -1,12 +1,13 @@
 package com.service;
 
-import com.domain.CurrentUser;
-import com.domain.Customer;
-import com.repository.CustomerRepository;
+import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.Objects;
+
+import com.domain.CurrentUser;
+import com.domain.Customer;
+import com.repository.CustomerRepository;
 
 /**
  * Created by Michał on 2016-11-20.
@@ -40,7 +41,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void delete(Long id) {
-        customerRepository.delete(id);
+        customerRepository.deleteById(id);
     }
 
 }
